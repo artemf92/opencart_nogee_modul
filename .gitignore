@@ -1,3 +1,4 @@
+.DS_store
 .htaccess
 /config.php
 admin/config.php

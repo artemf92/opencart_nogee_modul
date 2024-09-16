@@ -1,0 +1,81 @@
+<modification> 
+    <code>Nogee</code> 
+    <name>Nogee</name> 
+    <id>Nogee functions</id>
+    <version>1.3</version>
+	<author><![CDATA[Nogee https://newtoria.com]]></author> 
+
+    <!-- Target controller footer -->
+    <file error="skip" path="catalog/controller/common/footer.php">
+        <operation>
+            <search position="replace"><![CDATA[$data['styles'] = $this->document->getStyles();]]></search>
+            <add position="replace"><![CDATA[
+                if (!defined('DIR_CATALOG') && file_exists($ng = DIR_OPENCART.'extension/nogee/nogee.php')) {
+                    require_once($ng);
+                    $nogee = new Nogee($this->document);
+                    
+                    if (isset($this->request->get['route']) && $this->request->get['route'] == 'checkout/checkout') {
+                        $data['styles'] = $this->document->getStyles();
+                    } else {
+                        $data['styles'] = $nogee->getMinifiedStyles();
+                    }
+                }
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[$data['scripts'] = $this->document->getScripts('footer);]]></search>
+            <add position="replace"><![CDATA[
+                if (!defined('DIR_CATALOG') && file_exists($ng = DIR_OPENCART.'extension/nogee/nogee.php')) {
+                    require_once($ng);
+                    $nogee = new Nogee($this->document);
+                
+                    if (isset($this->request->get['route']) && $this->request->get['route'] == 'checkout/checkout') {
+                        $data['scripts'] = $this->document->getScripts('footer');
+                    } else {
+                        $data['scripts'] = $nogee->getMinifiedJs('footer');
+                    }
+                }
+            ]]></add>
+        </operation>
+    </file>
+
+    <!-- Target controller header -->
+    <file error="skip" path="catalog/controller/common/header.php">
+        <operation>
+            <search position="replace"><![CDATA[$data['styles'] = $this->document->getStyles();]]></search>
+            <add position="replace"><![CDATA[
+                if (!defined('DIR_CATALOG') && file_exists($ng = DIR_OPENCART.'extension/nogee/nogee.php')) {
+                    require_once($ng);
+                    $nogee = new Nogee($this->document);
+                    
+                    if (isset($this->request->get['route']) && $this->request->get['route'] == 'checkout/checkout') {
+                        $data['styles'] = $this->document->getStyles();
+                    } else {
+                        // $data['styles'] = $nogee->getMinifiedStyles();
+                    }
+
+                    if (file_exists(DIR_APPLICATION . 'view/stylesheet/critical.css')) {
+                        $data['critical_css'] = $nogee->minifyCssContent(file_get_contents(DIR_APPLICATION . 'view/stylesheet/critical.css'));
+                    }
+                }
+            ]]></add>
+        </operation>
+
+        <operation>
+            <search position="replace"><![CDATA[$data['scripts'] = $this->document->getScripts();]]></search>
+            <add position="replace"><![CDATA[
+                if (!defined('DIR_CATALOG') && file_exists($ng = DIR_OPENCART.'extension/nogee/nogee.php')) {
+                    require_once($ng);
+                    $nogee = new Nogee($this->document);
+                    
+                    if (isset($this->request->get['route']) && $this->request->get['route'] == 'checkout/checkout') {
+                        $data['scripts'] = $this->document->getScripts();
+                    } else {
+                        $data['scripts'] = $nogee->getMinifiedJs('header');
+                    }
+                }
+            ]]></add>
+        </operation>
+    </file>
+</modification>
